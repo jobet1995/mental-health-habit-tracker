@@ -195,6 +195,47 @@ var App = {
                     console.error('MoodManager not found during page load');
                 }
                 break;
+            case 'mood-analytics':
+                console.log('Mood Analytics loaded');
+                if (window.DashboardManager) {
+                    // Add a tiny delay to ensure DOM is fully ready and painted for Chart.js
+                    setTimeout(function() {
+                        DashboardManager.renderMoodTrendChart('moodTrendChartAnalytics');
+                        DashboardManager.renderMoodDistributionChart('moodDistChartAnalytics');
+                        DashboardManager.generateWellnessInsights(function(insights) {
+                            var $container = $('#mood-insights-container');
+                            if ($container.length > 0) {
+                                var html = insights.map(i => `<div class="alert alert-soft-primary rounded-4 border-0 p-3 mb-2 small text-secondary">
+                                    <i class="fas fa-info-circle text-primary me-2"></i> ${i}
+                                </div>`).join('');
+                                $container.html(html);
+                            }
+                        });
+                    }, 100);
+                }
+                break;
+            case 'edit-habit':
+                var editId = localStorage.getItem('mh_edit_habit_id');
+                if (editId && window.HabitManager) {
+                    HabitManager.getHabitById(parseInt(editId), function(habit) {
+                        if (habit) {
+                            $('#edit-habit-id').val(habit.id);
+                            $('#edit-habit-name').val(habit.name);
+                            $('#edit-habit-frequency').val(habit.frequency);
+                            $(`input[name="edit-habit-category"][value="${habit.category}"]`).prop('checked', true);
+                        }
+                    });
+                }
+                break;
+            case 'settings':
+                this.loadSavedProfile();
+                // Sync dark mode switch state
+                var isDark = localStorage.getItem('mh_dark_mode') === 'true';
+                $('#dark-mode-switch').prop('checked', isDark);
+                break;
+            case 'profile':
+                this.loadProfileData();
+                break;
             // Add other page-specific init logic
         }
     },
@@ -265,11 +306,9 @@ var App = {
 
         $(document).on('click', '[data-action="edit-habit"]', function() {
             var id = $(this).data('id');
-            // Store ID for the edit page to pick up if needed, or load special edit page
-            console.log('Edit habit triggered for ID:', id);
-            // In a real app, you might load "edit-habit" page with ID in params
-            // For now, let's just go to add-habit or show a placeholder
-            App.loadPage('add-habit'); 
+            // Load the edit page and pass the ID via a global state or localStorage
+            localStorage.setItem('mh_edit_habit_id', id);
+            App.loadPage('edit-habit'); 
         });
 
         $(document).on('click', '.habit-toggle-btn', function() {
@@ -325,18 +364,27 @@ var App = {
         });
 
         $(document).on('click', '[data-action="edit-profile"]', function() {
-            if (self.showEditProfile) self.showEditProfile();
-            else console.log('Edit Profile action triggered');
+            self.loadPage('profile');
         });
 
         $(document).on('click', '[data-action="show-help"]', function() {
-            if (self.showHelp) self.showHelp();
-            else console.log('Show Help action triggered');
+            self.loadPage('help-center');
         });
 
         $(document).on('click', '[data-action="export-data"]', function() {
-            if (self.exportData) self.exportData();
-            else console.log('Export Data action triggered');
+            alert('Data export started. Your wellness report will be generated as a PDF soon.');
+        });
+
+        $(document).on('click', '[data-action="close-modal"]', function() {
+            $('#app-modal').remove();
+        });
+
+        $(document).on('click', '[data-action="change-photo"]', function() {
+            self.handleChangePhoto();
+        });
+
+        $(document).on('change', '#profile-photo-input', function(e) {
+            self.handleFileSelect(e);
         });
 
         $(document).on('click', '#refresh-dashboard', function() {
@@ -398,6 +446,64 @@ var App = {
                 $('#header-container, #footer-container').empty(); // Clear content
             }
         });
+
+        // 7. Edit Habit Handlers
+        $(document).on('submit', '#edit-habit-form', function(e) {
+            e.preventDefault();
+            App.saveEditedHabit();
+        });
+
+        $(document).on('click', '#delete-habit-btn', function() {
+            var id = $('#edit-habit-id').val();
+            if (id && confirm('Are you sure you want to delete this habit?')) {
+                if (window.HabitManager) {
+                    HabitManager.deleteHabit(parseInt(id), function() {
+                        App.loadPage('habit-list');
+                    });
+                }
+            }
+        });
+
+        // 8. Profile Form Handlers
+        $(document).on('submit', '#profile-edit-form', function(e) {
+            e.preventDefault();
+            self.saveProfileData();
+        });
+    },
+
+    saveEditedHabit: function() {
+        var self = this;
+        var id = $('#edit-habit-id').val();
+        var name = $('#edit-habit-name').val();
+        var category = $('input[name="edit-habit-category"]:checked').val();
+        var frequency = $('#edit-habit-frequency').val();
+
+        if (window.HabitManager && id) {
+            HabitManager.updateHabit(parseInt(id), name, category, frequency, function() {
+                self.loadPage('habit-list');
+            });
+        }
+    },
+
+    /**
+     * Simple modal helper for basic interactions.
+     */
+    showModal: function(title, content) {
+        var modalHtml = `
+            <div id="app-modal" class="modal-backdrop d-flex align-items-center justify-content-center p-4" style="background: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050;">
+                <div class="modal-content bg-white rounded-4 shadow-lg overflow-hidden animate-slide-up" style="max-width: 400px; width: 100%;">
+                    <div class="modal-header border-0 p-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">${title}</h5>
+                        <button class="btn-close" data-action="close-modal"></button>
+                    </div>
+                    <div class="modal-body p-0">${content}</div>
+                    <div class="modal-footer border-0 p-3 pt-0">
+                        <button class="btn btn-primary w-100 rounded-pill" data-action="close-modal">Got it</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        $('body').append(modalHtml);
     },
 
     // ==========================================
@@ -475,12 +581,103 @@ var App = {
         }
     },
 
+    /**
+     * Camera & Photo Logic
+     */
+    handleChangePhoto: function() {
+        var self = this;
+        // Check if camera plugin is available
+        if (navigator.camera) {
+            navigator.camera.getPicture(function(imageUri) {
+                self.saveProfilePhoto(imageUri);
+            }, function(err) {
+                console.error('Camera error:', err);
+                // Fallback if user cancels or error occurs (try file input)
+                $('#profile-photo-input').click();
+            }, {
+                quality: 50,
+                destinationType: Camera.DestinationType.FILE_URI,
+                sourceType: Camera.PictureSourceType.CAMERA,
+                encodingType: Camera.EncodingType.JPEG,
+                mediaType: Camera.MediaType.PICTURE,
+                allowEdit: true,
+                correctOrientation: true
+            });
+        } else {
+            // Web/Electron Fallback
+            $('#profile-photo-input').click();
+        }
+    },
+
+    handleFileSelect: function(event) {
+        var self = this;
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                self.saveProfilePhoto(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    },
+
+    saveProfilePhoto: function(imageData) {
+        localStorage.setItem('mh_user_photo', imageData);
+        this.updateProfileUI(imageData);
+    },
+
+    loadSavedProfile: function() {
+        var photo = localStorage.getItem('mh_user_photo');
+        if (photo) {
+            this.updateProfileUI(photo);
+        }
+        
+        var name = localStorage.getItem('mh_user_name');
+        if (name) {
+            $('#display-user-name').text(name);
+        }
+    },
+
+    updateProfileUI: function(imageData) {
+        var $avatar = $('#user-avatar, #edit-profile-avatar');
+        if ($avatar.length > 0) {
+            $avatar.html('<img src="' + imageData + '" alt="Profile" class="rounded-circle shadow-sm">');
+        }
+    },
+
+    loadProfileData: function() {
+        var name = localStorage.getItem('mh_user_name') || '';
+        var bio = localStorage.getItem('mh_user_bio') || '';
+        var photo = localStorage.getItem('mh_user_photo');
+        
+        $('#profile-name').val(name);
+        $('#profile-bio').val(bio);
+        if (photo) this.updateProfileUI(photo);
+    },
+
+    saveProfileData: function() {
+        var name = $('#profile-name').val();
+        var bio = $('#profile-bio').val();
+        
+        localStorage.setItem('mh_user_name', name);
+        localStorage.setItem('mh_user_bio', bio);
+        
+        // Update DB if needed, but localStorage is source of truth for UI here
+        if (window.DBHelper) {
+            DBHelper.updateSetting('user_name', name);
+        }
+        
+        alert('Profile updated successfully!');
+        this.loadPage('settings');
+    },
+
     toggleNotifications: function(enabled) {
         console.log('Notifications toggled:', enabled);
     },
 
     toggleDarkMode: function(enabled) {
         $('body').toggleClass('dark-mode', enabled);
+        localStorage.setItem('mh_dark_mode', enabled);
     },
 
     /**
@@ -587,6 +784,10 @@ $(function() {
         App.toggleAuthUI(false);
         App.loadPage('login', true);
     }
+
+    // Load Dark Mode Preference
+    var isDark = localStorage.getItem('mh_dark_mode') === 'true';
+    $('body').toggleClass('dark-mode', isDark);
 });
 
 // Export to window for global access

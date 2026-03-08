@@ -143,6 +143,10 @@ var DBHelper = {
      * @param {Function} callback - returns an array of habits
      */
     getHabits: function(callback) {
+        if (!db) {
+            setTimeout(() => this.getHabits(callback), 100);
+            return;
+        }
         db.transaction(function(tx) {
             var query = 'SELECT * FROM habits';
             tx.executeSql(query, [], function(tx, rs) {
@@ -223,6 +227,10 @@ var DBHelper = {
      * @param {Function} callback - returns an array of mood logs
      */
     getMoodLogs: function(callback) {
+        if (!db) {
+            setTimeout(() => this.getMoodLogs(callback), 100);
+            return;
+        }
         db.transaction(function(tx) {
             var query = 'SELECT * FROM mood_logs ORDER BY date DESC, created_at DESC';
             tx.executeSql(query, [], function(tx, rs) {
@@ -266,6 +274,10 @@ var DBHelper = {
      * @param {Function} callback - returns the setting value or null if not found
      */
     getSetting: function(key, callback) {
+        if (!db) {
+            setTimeout(() => this.getSetting(key, callback), 100);
+            return;
+        }
         db.transaction(function(tx) {
             var query = 'SELECT value FROM settings WHERE key = ?';
             tx.executeSql(query, [key], function(tx, rs) {

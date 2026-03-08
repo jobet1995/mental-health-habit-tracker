@@ -270,7 +270,7 @@ var MoodManager = {
             var $list = $container.find('.mood-history-list');
 
             if (logs.length === 0) {
-                $list.html('<p class="no-data">No mood logs yet.</p>');
+                $container.html('<div class="empty-habit-state opacity-50"><i class="fas fa-history empty-icon"></i><p class="empty-text">No mood logs yet.</p></div>');
                 return;
             }
 

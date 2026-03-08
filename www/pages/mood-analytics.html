@@ -1,0 +1,78 @@
+<div class="mood-analytics-page fade-in">
+    <!-- Page Header -->
+    <section class="analytics-header mb-4 mt-2 px-1">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="h3 fw-bold text-dark mb-1">Mood Insights</h2>
+                <p class="text-secondary small">Understanding your emotional patterns.</p>
+            </div>
+            <div class="header-action">
+                <button class="btn btn-light-primary rounded-circle shadow-sm" style="width: 45px; height: 45px;">
+                    <i class="fas fa-calendar-alt"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mood Trend Chart -->
+    <section class="chart-section mb-4">
+        <div class="card border-0 rounded-4 shadow-sm p-4">
+            <h3 class="h6 fw-bold mb-4 d-flex align-items-center">
+                <i class="fas fa-chart-line text-primary me-2"></i> 7-Day Mood Trend
+            </h3>
+            <div style="height: 200px;">
+                <canvas id="moodTrendChartAnalytics"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mood Distribution & Stats -->
+    <section class="stats-grid mb-4">
+        <div class="row g-3">
+            <div class="col-6">
+                <div class="card border-0 rounded-4 shadow-sm p-3 h-100 text-center">
+                    <small class="text-uppercase text-muted fw-bold mb-2 tracking-wider" style="font-size: 0.6rem;">Most Frequent</small>
+                    <div id="top-mood-icon" class="h1 mb-1">😄</div>
+                    <span id="top-mood-label" class="fw-bold small">Happy</span>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card border-0 rounded-4 shadow-sm p-3 h-100 text-center">
+                    <small class="text-uppercase text-muted fw-bold mb-2 tracking-wider" style="font-size: 0.6rem;">Avg Score</small>
+                    <div id="avg-mood-value" class="h2 fw-bold mb-0 text-primary">4.2</div>
+                    <span class="text-secondary small">Out of 5</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Distribution -->
+    <section class="distribution-section mb-4">
+        <div class="card border-0 rounded-4 shadow-sm p-4">
+            <h3 class="h6 fw-bold mb-3">Emotional Balance</h3>
+            <div style="height: 180px;">
+                <canvas id="moodDistChartAnalytics"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wellness Insights (Dynamic) -->
+    <section class="insights-section mb-5">
+        <h3 class="h6 fw-bold text-uppercase text-muted mb-3 px-1 tracking-wider">Wellness Insights</h3>
+        <div id="mood-insights-container">
+            <!-- Dynamic insights will be injected here -->
+            <div class="alert alert-soft-primary rounded-4 border-0 p-3 mb-2 small text-secondary">
+                <i class="fas fa-info-circle text-primary me-2"></i> Analyzing your data for patterns...
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .tracking-wider { letter-spacing: 0.1em; }
+    .btn-light-primary {
+        background-color: rgba(108, 155, 210, 0.1);
+        color: var(--color-primary);
+        border: none;
+    }
+</style>

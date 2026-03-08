@@ -181,7 +181,7 @@ var HabitManager = {
             }
 
             if (filteredHabits.length === 0) {
-                $container.html('<div class="text-center py-5 opacity-50"><i class="fas fa-clipboard-list fa-3x mb-3"></i><p>No habits found in this category.</p></div>');
+                $container.html('<div class="empty-habit-state opacity-50"><i class="fas fa-clipboard-list empty-icon"></i><p class="empty-text">No habits found in this category.</p></div>');
                 return;
             }
 

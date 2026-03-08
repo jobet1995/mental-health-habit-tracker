@@ -1,0 +1,54 @@
+<div class="profile-page fade-in">
+    <!-- Page Header -->
+    <section class="profile-header mb-4 mt-2 px-1">
+        <h2 class="h3 fw-bold text-dark mb-1">My Profile</h2>
+        <p class="text-secondary small">Manage your personal information and preferences.</p>
+    </section>
+
+    <!-- Profile Edit Form -->
+    <section class="profile-form-section mb-4">
+        <div class="card border-0 rounded-4 shadow-sm p-4">
+            <div class="text-center mb-4">
+                <div class="profile-avatar-wrapper position-relative d-inline-block">
+                    <div id="edit-profile-avatar" class="profile-avatar bg-light-primary rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <i class="fas fa-user-circle fa-4x text-primary opacity-25"></i>
+                    </div>
+                    <button class="btn btn-primary rounded-circle position-absolute bottom-0 end-0 p-0 d-flex align-items-center justify-content-center shadow-sm" 
+                            style="width: 32px; height: 32px; border: 2px solid white;"
+                            data-action="change-photo">
+                        <i class="fas fa-camera" style="font-size: 0.8rem;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <form id="profile-edit-form">
+                <div class="form-group mb-3">
+                    <label class="small fw-bold text-muted text-uppercase mb-2">Display Name</label>
+                    <input type="text" id="profile-name" class="form-control border-0 bg-light rounded-3 p-3" placeholder="Enter your name" required>
+                </div>
+                
+                <div class="form-group mb-4">
+                    <label class="small fw-bold text-muted text-uppercase mb-2">Bio / Wellness Motto</label>
+                    <textarea id="profile-bio" class="form-control border-0 bg-light rounded-3 p-3" rows="3" placeholder="I am focused on my well-being..."></textarea>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold shadow-sm">
+                        Save Changes
+                    </button>
+                    <button type="button" class="btn btn-link text-secondary text-decoration-none small" data-action="load-page" data-page="settings">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+<style>
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>

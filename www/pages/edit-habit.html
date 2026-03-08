@@ -1,0 +1,92 @@
+<div class="edit-habit-container fade-in">
+    <div class="d-flex align-items-center mb-4">
+        <button class="btn btn-link text-secondary p-0 me-3" data-action="load-page" data-page="habit-list">
+            <i class="fas fa-arrow-left fa-lg"></i>
+        </button>
+        <h2 class="h4 fw-bold mb-0">Edit Habit</h2>
+    </div>
+
+    <div class="card border-0 rounded-4 shadow-sm p-4 mb-4">
+        <form id="edit-habit-form">
+            <input type="hidden" id="edit-habit-id">
+            <div class="mb-4">
+                <label for="edit-habit-name" class="form-label fw-bold text-secondary small text-uppercase tracking-wider">Habit Name</label>
+                <input type="text" class="form-control form-control-lg rounded-3 border-light bg-light" id="edit-habit-name" placeholder="e.g., Morning Meditation" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold text-secondary small text-uppercase tracking-wider">Category</label>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <input type="radio" class="btn-check" name="edit-habit-category" id="edit-cat-mental" value="mental_health" autocomplete="off">
+                        <label class="btn btn-outline-primary w-100 py-3 rounded-3 d-flex flex-column align-items-center" for="edit-cat-mental">
+                            <i class="fas fa-brain mb-2"></i>
+                            <span class="small">Mental</span>
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <input type="radio" class="btn-check" name="edit-habit-category" id="edit-cat-physical" value="physical_health" autocomplete="off">
+                        <label class="btn btn-outline-success w-100 py-3 rounded-3 d-flex flex-column align-items-center" for="edit-cat-physical">
+                            <i class="fas fa-dumbbell mb-2"></i>
+                            <span class="small">Physical</span>
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <input type="radio" class="btn-check" name="edit-habit-category" id="edit-cat-productivity" value="productivity" autocomplete="off">
+                        <label class="btn btn-outline-warning w-100 py-3 rounded-3 d-flex flex-column align-items-center" for="edit-cat-productivity">
+                            <i class="fas fa-briefcase mb-2"></i>
+                            <span class="small">Work</span>
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <input type="radio" class="btn-check" name="edit-habit-category" id="edit-cat-care" value="self_care" autocomplete="off">
+                        <label class="btn btn-outline-info w-100 py-3 rounded-3 d-flex flex-column align-items-center" for="edit-cat-care">
+                            <i class="fas fa-spa mb-2"></i>
+                            <span class="small">Self-Care</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="edit-habit-frequency" class="form-label fw-bold text-secondary small text-uppercase tracking-wider">Frequency</label>
+                <select class="form-select form-select-lg rounded-3 border-light bg-light" id="edit-habit-frequency">
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+
+            <div class="d-grid gap-2 pt-3">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow-sm">
+                    Save Changes
+                </button>
+                <button type="button" id="delete-habit-btn" class="btn btn-link text-danger fw-bold small text-decoration-none mt-2">
+                    Delete Habit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .btn-check:checked + .btn-outline-primary {
+        background-color: rgba(108, 155, 210, 0.1);
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+    .btn-check:checked + .btn-outline-success {
+        background-color: rgba(165, 214, 167, 0.1);
+        border-color: var(--color-secondary);
+        color: var(--color-secondary);
+    }
+    .btn-check:checked + .btn-outline-warning {
+        background-color: rgba(255, 213, 79, 0.1);
+        border-color: var(--color-accent);
+        color: #d4a500;
+    }
+    .btn-check:checked + .btn-outline-info {
+        background-color: rgba(0, 188, 212, 0.1);
+        border-color: #00bcd4;
+        color: #00838f;
+    }
+</style>

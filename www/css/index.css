@@ -40,6 +40,91 @@
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* Dark Mode Overrides */
+.dark-mode {
+    --color-background: #121212;
+    --color-surface: #1E1E1E;
+    --color-border: #333333;
+    --color-text-primary: #F5F5F5;
+    --color-text-secondary: #B0B0B0;
+}
+
+.dark-mode .card, 
+.dark-mode .list-group-item,
+.dark-mode .modal-content {
+    background-color: var(--color-surface) !important;
+    color: var(--color-text-primary) !important;
+    border-color: var(--color-border) !important;
+}
+
+.dark-mode .text-dark,
+.dark-mode h1, .dark-mode h2, .dark-mode h3, 
+.dark-mode h4, .dark-mode h5, .dark-mode h6,
+.dark-mode .fw-bold, .dark-mode .fw-medium {
+    color: var(--color-text-primary) !important;
+}
+
+.dark-mode .text-secondary,
+.dark-mode .text-muted,
+.dark-mode p, .dark-mode small {
+    color: var(--color-text-secondary) !important;
+}
+
+.dark-mode .bg-white,
+.dark-mode .bg-light,
+.dark-mode .list-group-item {
+    background-color: var(--color-surface) !important;
+}
+
+.dark-mode .btn-outline-danger.bg-white {
+    background-color: transparent !important;
+    border-color: var(--color-danger) !important;
+}
+
+.dark-mode .bg-light-primary {
+    background-color: rgba(108, 155, 210, 0.15) !important;
+}
+
+.dark-mode .glass-header {
+    background-color: rgba(30,30,30, 0.8) !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+}
+
+.dark-mode .glass-footer {
+    background-color: rgba(30,30,30, 0.9) !important;
+    border-top-color: rgba(255,255,255,0.05) !important;
+}
+
+.dark-mode .alert-soft-primary {
+    background-color: rgba(108, 155, 210, 0.1) !important;
+    color: var(--color-text-secondary) !important;
+}
+
+.dark-mode input, 
+.dark-mode textarea, 
+.dark-mode select,
+.dark-mode .form-control {
+    background-color: #2D2D2D !important;
+    color: var(--color-text-primary) !important;
+    border-color: var(--color-border) !important;
+}
+
+.dark-mode .input-group-text {
+    background-color: #262626 !important;
+    color: var(--color-text-secondary) !important;
+    border-color: var(--color-border) !important;
+}
+
+.dark-mode .btn-light {
+    background-color: #333333 !important;
+    color: var(--color-text-primary) !important;
+    border-color: var(--color-border) !important;
+}
+
+.dark-mode .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
 /* ==========================================
    Section 3: Global Reset
    ========================================== */
@@ -100,7 +185,7 @@ strong {
 .container {
     padding: 0 var(--spacing-md);
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0 auto !important;
     width: 100%;
 }
 
@@ -113,11 +198,18 @@ strong {
     background-color: rgba(255, 255, 255, 0.85);
     display: flex;
     align-items: center;
+    justify-content: center; /* Center the child .container */
     z-index: 1100;
     padding: 0;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.dark-mode .app-header {
+    background-color: rgba(30, 30, 30, 0.85);
+    border-bottom-color: rgba(255, 255, 255, 0.05) !important;
 }
 
 .glass-header {
@@ -145,9 +237,17 @@ strong {
     right: 0;
     height: 70px;
     background-color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the child .container */
     z-index: 1050;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    transition: background-color 0.3s ease;
+}
+
+.dark-mode .app-footer {
+    background-color: rgba(30, 30, 30, 0.85);
 }
 
 .glass-footer {
@@ -428,6 +528,6 @@ input:focus, textarea:focus, select:focus {
 
 @media (min-width: 1024px) {
     .container {
-        max-width: 1024px;
+        max-width: 800px; /* Reduced from 1024px for a tighter desktop layout */
     }
 }

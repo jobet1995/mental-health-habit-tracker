@@ -227,21 +227,32 @@ var DashboardManager = {
      * Helper to create/reuse Chart.js instances.
      */
     createChart: function(id, type, data, options) {
+        var $canvas = $('#' + id);
+        if ($canvas.length === 0) return;
+
         if (this.charts[id]) {
             this.charts[id].destroy();
         }
         
-        var $canvas = $('#' + id);
-        if ($canvas.length === 0) return;
-
-        this.charts[id] = new Chart($canvas[0], {
+        var ctx = $canvas[0].getContext('2d');
+        this.charts[id] = new Chart(ctx, {
             type: type,
             data: data,
             options: Object.assign({
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 400
+                }
             }, options || {})
         });
+        
+        // Force an update after a brief moment to ensure proper scaling 
+        // especially if being rendered inside an AJAX-loaded container
+        var self = this;
+        setTimeout(function() {
+            if (self.charts[id]) self.charts[id].update();
+        }, 50);
     },
 
     // ==========================================

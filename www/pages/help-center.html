@@ -1,0 +1,83 @@
+<div class="help-page fade-in">
+    <!-- Page Header -->
+    <section class="help-header mb-4 mt-2 px-1">
+        <div class="d-flex align-items-center mb-1">
+            <button class="btn btn-link p-0 me-2 text-dark" data-action="load-page" data-page="settings">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="h3 fw-bold text-dark mb-0">Help Center</h2>
+        </div>
+        <p class="text-secondary small ms-4">Frequently asked questions and support.</p>
+    </section>
+
+    <!-- FAQ Search (Visual Only) -->
+    <section class="search-section mb-4">
+        <div class="input-group bg-white rounded-pill shadow-sm overflow-hidden border-0">
+            <span class="input-group-text bg-white border-0 ps-3">
+                <i class="fas fa-search text-muted"></i>
+            </span>
+            <input type="text" class="form-control border-0 py-3" placeholder="Search for help...">
+        </div>
+    </section>
+
+    <!-- FAQ Accordion -->
+    <section class="faq-section mb-5">
+        <h3 class="h6 fw-bold text-uppercase text-muted mb-3 px-1 tracking-wider">Common Questions</h3>
+        
+        <div class="accordion accordion-flush" id="helpAccordion">
+            <!-- Question 1 -->
+            <div class="card border-0 rounded-4 shadow-sm mb-3">
+                <div class="p-3" data-bs-toggle="collapse" data-bs-target="#collapseOne" style="cursor: pointer;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-dark">How do I track a habit?</span>
+                        <i class="fas fa-chevron-down text-muted small"></i>
+                    </div>
+                </div>
+                <div id="collapseOne" class="collapse" data-bs-parent="#helpAccordion">
+                    <div class="p-3 pt-0 text-secondary small">
+                        Simply navigate to the "Habits" tab from the bottom menu, find your habit, and tap the checkmark circle to mark it as complete for today.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="card border-0 rounded-4 shadow-sm mb-3">
+                <div class="p-3" data-bs-toggle="collapse" data-bs-target="#collapseTwo" style="cursor: pointer;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-dark">Can I edit my mood logs?</span>
+                        <i class="fas fa-chevron-down text-muted small"></i>
+                    </div>
+                </div>
+                <div id="collapseTwo" class="collapse" data-bs-parent="#helpAccordion">
+                    <div class="p-3 pt-0 text-secondary small">
+                        Yes! In the "Mood" tab, find your entry in the "Emotional History" section and tap the (i) info icon to view details, then select Edit.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="card border-0 rounded-4 shadow-sm mb-3">
+                <div class="p-3" data-bs-toggle="collapse" data-bs-target="#collapseThree" style="cursor: pointer;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-dark">What is Dark Mode?</span>
+                        <i class="fas fa-chevron-down text-muted small"></i>
+                    </div>
+                </div>
+                <div id="collapseThree" class="collapse" data-bs-parent="#helpAccordion">
+                    <div class="p-3 pt-0 text-secondary small">
+                        Dark Mode reduces eye strain by using a darker color palette. You can toggle it on or off in the Settings menu.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Support -->
+    <section class="contact-section">
+        <div class="alert alert-soft-primary rounded-4 border-0 p-4 text-center">
+            <h4 class="h6 fw-bold text-primary mb-2">Still need help?</h4>
+            <p class="small text-secondary mb-3">Our team is here to support your journey.</p>
+            <button class="btn btn-primary rounded-pill px-4 fw-bold">Email Support</button>
+        </div>
+    </section>
+</div>
