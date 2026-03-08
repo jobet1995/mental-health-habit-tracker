@@ -1,0 +1,97 @@
+<div class="home-container fade-in">
+    <!-- Hero Section -->
+    <section class="hero-section mb-4 p-4 rounded-4 bg-light-primary shadow-sm overflow-hidden position-relative">
+        <div class="hero-content position-relative z-1">
+            <h2 class="h1 fw-bold text-primary-gradient mb-2">Hello, Friend.</h2>
+            <p class="text-secondary lead mb-0">How are you feeling today? Let's take a moment for your well-being.</p>
+        </div>
+        <!-- Decorative Background Element -->
+        <div class="position-absolute end-0 top-0 opacity-10 translate-middle-y me-n4 mt-n4" style="font-size: 8rem;">
+            <i class="fas fa-seedling"></i>
+        </div>
+    </section>
+
+    <!-- Daily Affirmation (Glassmorphism) -->
+    <section class="affirmation-section mb-4">
+        <div class="card glass-card border-0 rounded-4 shadow-md p-4 bg-primary text-white position-relative">
+            <div class="quote-icon position-absolute start-0 top-0 m-3 opacity-25">
+                <i class="fas fa-quote-left h3"></i>
+            </div>
+            <div class="text-center py-2">
+                <p class="h5 fw-medium italic mb-2">"You are capable of amazing things. Trust your progress."</p>
+                <small class="text-white-50 text-uppercase fw-bold tracking-wider" style="font-size: 0.7rem;">Daily Affirmation</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Grid -->
+    <section class="quick-actions-section mb-4">
+        <h3 class="h6 fw-bold text-uppercase text-muted mb-3 tracking-wider">Quick Actions</h3>
+        <div class="row g-3">
+            <div class="col-6">
+                <button class="btn btn-white w-100 py-3 rounded-4 shadow-sm border-0 d-flex flex-column align-items-center" data-action="load-page" data-page="add-habit">
+                    <div class="action-icon mb-2 bg-light-primary p-3 rounded-circle text-primary">
+                        <i class="fas fa-plus fa-lg"></i>
+                    </div>
+                    <span class="fw-bold small">Add Habit</span>
+                </button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-white w-100 py-3 rounded-4 shadow-sm border-0 d-flex flex-column align-items-center" data-action="load-page" data-page="mood-tracker">
+                    <div class="action-icon mb-2 bg-light-success p-3 rounded-circle text-success" style="background-color: rgba(165, 214, 167, 0.1);">
+                        <i class="fas fa-smile fa-lg"></i>
+                    </div>
+                    <span class="fw-bold small">Log Mood</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Summary -->
+    <section class="progress-summary-section mb-4">
+        <div class="card border-0 rounded-4 shadow-sm p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h6 fw-bold mb-0">Today's Progress</h3>
+                <span id="home-progress-badge" class="badge bg-light text-primary rounded-pill">0% Done</span>
+            </div>
+            <div class="progress mb-2" style="height: 8px;">
+                <div id="home-progress-bar" class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <small id="home-completed-count" class="text-muted">0 habits completed</small>
+                <small id="home-remaining-count" class="text-muted">0 remaining</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- Motivational Tip -->
+    <div class="alert alert-soft-primary rounded-4 border-0 d-flex align-items-center p-3" role="alert" style="background-color: rgba(108, 155, 210, 0.05);">
+        <i class="fas fa-lightbulb text-warning me-3 h4 mb-0"></i>
+        <div class="small text-secondary">
+            <strong>Pro Tip:</strong> Small steps lead to big changes. Focus on one habit at a time today!
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Page specific refinements if needed */
+    .hero-section {
+        background: linear-gradient(135deg, rgba(108, 155, 210, 0.1) 0%, rgba(165, 214, 167, 0.1) 100%);
+    }
+    .glass-card {
+        background: linear-gradient(45deg, var(--color-primary), #5B89C1) !important;
+        overflow: hidden;
+    }
+    .btn-white {
+        background: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-white:hover, .btn-white:active {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08) !important;
+    }
+    .tracking-wider {
+        letter-spacing: 0.1em;
+    }
+</style>

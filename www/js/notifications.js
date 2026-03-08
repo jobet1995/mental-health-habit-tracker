@@ -21,23 +21,34 @@ var NotificationManager = {
      * Initializes notification permissions and sets default settings.
      */
     initNotifications: function() {
-        if (!window.cordova || !cordova.plugins || !cordova.plugins.notification) {
-            console.error('Cordova Local Notification plugin not found.');
+        var self = this;
+        
+        // 1. Check if Cordova plugin is available and has proxy
+        var hasPlugin = (window.cordova && cordova.plugins && cordova.plugins.notification && cordova.plugins.notification.local);
+        
+        if (!hasPlugin) {
+            console.warn('Cordova Notification plugin not fully available. Using Web Notification API fallback.');
+            this.useFallback = true;
             return;
         }
 
-        // Request permissions
-        cordova.plugins.notification.local.hasPermission(function(granted) {
-            if (!granted) {
-                cordova.plugins.notification.local.requestPermission(function(granted) {
-                    console.log('Notification permission granted:', granted);
-                });
-            }
-        });
+        // 2. Request permissions (Cordova way)
+        try {
+            cordova.plugins.notification.local.hasPermission(function(granted) {
+                if (!granted) {
+                    cordova.plugins.notification.local.requestPermission(function(granted) {
+                        console.log('Notification permission granted:', granted);
+                    });
+                }
+            });
 
-        // Set default settings/handlers
-        this.setupEventHandlers();
-        console.log('Notification Manager initialized.');
+            // 3. Set default handlers
+            this.setupEventHandlers();
+            console.log('Notification Manager initialized via Plugin.');
+        } catch (e) {
+            console.error('Failed to initialize Plugin notifications, using fallback:', e);
+            this.useFallback = true;
+        }
     },
 
     // ==========================================
@@ -51,6 +62,11 @@ var NotificationManager = {
      * @param {Date} time - The time of day to trigger.
      */
     scheduleHabitReminder: function(habitId, habitName, time) {
+        if (this.useFallback) {
+            this.scheduleNativeNotification('Habit Reminder: ' + habitName, "Don't forget to complete your habit today!");
+            return;
+        }
+
         var id = this.ids.habit_base + parseInt(habitId);
         
         cordova.plugins.notification.local.schedule({
@@ -67,6 +83,26 @@ var NotificationManager = {
         });
         
         console.log('Scheduled habit reminder for:', habitName, 'at', time);
+    },
+
+    /**
+     * Fallback for environments where Cordova plugin fails (like Electron/Browser)
+     */
+    scheduleNativeNotification: function(title, body) {
+        if (!("Notification" in window)) {
+            console.error("This browser does not support desktop notification");
+            return;
+        }
+
+        if (Notification.permission === "granted") {
+            new Notification(title, { body: body });
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(function (permission) {
+                if (permission === "granted") {
+                    new Notification(title, { body: body });
+                }
+            });
+        }
     },
 
     // ==========================================

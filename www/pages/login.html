@@ -1,0 +1,53 @@
+<div class="login-container vh-100 d-flex flex-column align-items-center justify-content-center p-4 fade-in">
+    <div class="auth-card card border-0 rounded-4 shadow-lg p-4 w-100" style="max-width: 400px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);">
+        <div class="text-center mb-4">
+            <div class="auth-logo bg-primary text-white p-3 rounded-circle d-inline-flex mb-3">
+                <i class="fas fa-heartbeat fa-2x"></i>
+            </div>
+            <h2 class="h3 fw-bold text-primary-gradient">Welcome Back</h2>
+            <p class="text-secondary small">Sign in to continue your journey</p>
+        </div>
+
+        <form id="login-form">
+            <div class="form-group mb-3">
+                <label for="login-email" class="small fw-bold text-uppercase text-muted">Email Address</label>
+                <input type="email" class="form-control rounded-3 border-light bg-light p-3" id="login-email" placeholder="name@example.com" required>
+            </div>
+            <div class="form-group mb-4">
+                <label for="login-password" class="small fw-bold text-uppercase text-muted">Password</label>
+                <input type="password" class="form-control rounded-3 border-light bg-light p-3" id="login-password" placeholder="••••••••" required>
+            </div>
+
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow-sm">
+                    Sign In
+                </button>
+            </div>
+
+            <div class="text-center">
+                <p class="small text-secondary mb-0">Don't have an account? 
+                    <a href="#" class="fw-bold text-primary text-decoration-none" data-action="load-page" data-page="signup">Sign Up</a>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Decorative background blobs -->
+    <div class="position-fixed top-0 start-0 w-100 h-100 z-n1 overflow-hidden opacity-25">
+        <div class="blob bg-primary position-absolute rounded-circle" style="width: 300px; height: 300px; top: -150px; left: -150px; filter: blur(80px);"></div>
+        <div class="blob bg-success position-absolute rounded-circle" style="width: 250px; height: 250px; bottom: -100px; right: -100px; filter: blur(80px);"></div>
+    </div>
+</div>
+
+<style>
+    .auth-page .app-header, .auth-page .app-footer {
+        display: none !important;
+    }
+    .auth-page .app-content {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+    .auth-card {
+        border: 1px solid rgba(255,255,255,0.3) !important;
+    }
+</style>

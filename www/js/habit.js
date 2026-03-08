@@ -2,6 +2,7 @@
  * habit.js
  * Manages habit tracking logic for the MindHabit application.
  * Interacts with DBHelper from db.js for SQLite persistence.
+ * Uses jQuery for DOM manipulation.
  */
 
 var HabitManager = {
@@ -107,7 +108,7 @@ var HabitManager = {
         this.getHabitById(id, function(habit) {
             if (!habit) return console.error('Habit not found');
 
-            var today = new Date().toISOString().split('T')[0];
+            var today = Utils.getCurrentDate();
             
             // Check if already completed today
             if (habit.last_completed_date === today) {
@@ -116,7 +117,7 @@ var HabitManager = {
                 return;
             }
 
-            var newStreak = self.calculateStreak(habit.last_completed_date, habit.streak);
+            var newStreak = Utils.calculateStreak(habit.last_completed_date, habit.streak);
             
             var updateObj = {
                 streak: newStreak,
@@ -130,51 +131,9 @@ var HabitManager = {
         });
     },
 
-    /**
-     * Logic to determine the new streak count.
-     * @param {string} lastCompletedDate - ISO string (YYYY-MM-DD).
-     * @param {number} currentStreak 
-     * @returns {number} New streak count.
-     */
-    calculateStreak: function(lastCompletedDate, currentStreak) {
-        if (!lastCompletedDate) return 1;
-
-        var today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        var last = new Date(lastCompletedDate);
-        last.setHours(0, 0, 0, 0);
-
-        var diffTime = Math.abs(today - last);
-        var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 1) {
-            // Completed yesterday
-            return currentStreak + 1;
-        } else if (diffDays === 0) {
-            // Already completed today
-            return currentStreak;
-        } else {
-            // Missed days
-            return 1;
-        }
-    },
-
     // ==========================================
     // Section 3: Statistics
     // ==========================================
-
-    /**
-     * Calculate completion rate for the last 30 days.
-     * Note: This implementation assumes a simple mock for now as 
-     * full history tracking would require a separate log table.
-     * @param {number} habitId 
-     * @returns {number} Percentage
-     */
-    getHabitCompletionRate: function(habitId) {
-        // Placeholder logic: in a real app, you'd count rows in a habit_logs table
-        return Math.floor(Math.random() * 100); 
-    },
 
     /**
      * Retrieve global statistics for all habits.
@@ -182,7 +141,7 @@ var HabitManager = {
      */
     getHabitStats: function(callback) {
         this.getAllHabits(function(habits) {
-            var today = new Date().toISOString().split('T')[0];
+            var today = Utils.getCurrentDate();
             var completedToday = habits.filter(h => h.last_completed_date === today).length;
             var longestStreak = habits.reduce((max, h) => Math.max(max, h.streak || 0), 0);
             
@@ -202,43 +161,79 @@ var HabitManager = {
     // ==========================================
 
     /**
-     * Dynamically renders the habit list into the UI.
+     * Dynamically renders the habit list into the UI using jQuery.
      * @param {string} containerId - The ID of the DOM element.
      */
-    renderHabitList: function(containerId) {
+    renderHabitList: function(containerId, filter) {
         var self = this;
-        var container = document.getElementById(containerId);
-        if (!container) return;
+        var $container = $('#' + containerId);
+        if ($container.length === 0) return;
 
         this.getAllHabits(function(habits) {
-            container.innerHTML = '';
+            $container.empty();
             
-            if (habits.length === 0) {
-                container.innerHTML = '<p class="no-data">No habits tracked yet. Start one!</p>';
+            var filteredHabits = habits;
+            if (filter && filter !== 'all') {
+                filteredHabits = habits.filter(h => h.category === filter || 
+                   (filter === 'mental' && h.category === 'mental_health') ||
+                   (filter === 'physical' && h.category === 'physical_health') ||
+                   (filter === 'self-care' && h.category === 'self_care'));
+            }
+
+            if (filteredHabits.length === 0) {
+                $container.html('<div class="text-center py-5 opacity-50"><i class="fas fa-clipboard-list fa-3x mb-3"></i><p>No habits found in this category.</p></div>');
                 return;
             }
 
-            habits.forEach(function(habit) {
-                var today = new Date().toISOString().split('T')[0];
+            filteredHabits.forEach(function(habit) {
+                var today = Utils.getCurrentDate();
                 var isCompleted = habit.last_completed_date === today;
                 
-                var habitEl = document.createElement('div');
-                habitEl.className = 'habit-card ' + (isCompleted ? 'completed' : '');
-                habitEl.innerHTML = `
-                    <div class="habit-info">
-                        <h3 class="habit-name">${habit.name}</h3>
-                        <span class="habit-category">${habit.category.replace('_', ' ')}</span>
-                    </div>
-                    <div class="habit-actions">
-                        <span class="habit-streak">🔥 ${habit.streak}</span>
-                        <button class="btn-complete" onclick="HabitManager.toggleHabitCompletion(${habit.id})">
-                            ${isCompleted ? '✓' : 'Complete'}
-                        </button>
-                    </div>
-                `;
-                container.appendChild(habitEl);
+                // Use the professional template from App.templates
+                var template = App.templates['habit-card'] || '';
+                var html = template
+                    .replace(/{{id}}/g, habit.id)
+                    .replace(/{{name}}/g, habit.name)
+                    .replace(/{{category}}/g, Utils.capitalizeFirstLetter(habit.category.replace('_', ' ')))
+                    .replace(/{{categoryIcon}}/g, self.getCategoryIcon(habit.category))
+                    .replace(/{{streak}}/g, habit.streak)
+                    .replace(/{{frequency}}/g, Utils.capitalizeFirstLetter(habit.frequency))
+                    .replace(/{{completedClass}}/g, isCompleted ? 'completed' : '')
+                    .replace(/{{completionPercent}}/g, isCompleted ? 100 : 0); // Simplified logic
+                
+                $container.append(html);
             });
         });
+    },
+
+    /**
+     * Get aggregate statistics for the home screen and dashboard.
+     * @param {function} callback 
+     */
+    getHabitStats: function(callback) {
+        DBHelper.getHabits(function(habits) {
+            var today = Utils.getCurrentDate();
+            var total = habits.length;
+            var completedToday = habits.filter(h => h.last_completed_date === today).length;
+            
+            if (callback) callback({
+                totalHabits: total,
+                completedToday: completedToday
+            });
+        });
+    },
+
+    /**
+     * Map category code to Font Awesome icon.
+     */
+    getCategoryIcon: function(category) {
+        var icons = {
+            'mental_health': 'fa-brain',
+            'physical_health': 'fa-dumbbell',
+            'productivity': 'fa-briefcase',
+            'self_care': 'fa-spa'
+        };
+        return icons[category] || 'fa-check-circle';
     },
 
     /**
@@ -250,6 +245,9 @@ var HabitManager = {
         this.completeHabit(habitId, function() {
             // Re-render the list to update UI
             self.renderHabitList('habit-container');
+            
+            // Trigger haptic-like scale effect via jQuery
+            $('.habit-card[data-id="' + habitId + '"]').addClass('scale-in');
         });
     }
 };

@@ -2,6 +2,7 @@
  * dashboard.js
  * Handles analytics, statistics, and data visualization for MindHabit.
  * Uses Chart.js for rendering charts and Utils from utils.js for helpers.
+ * Refactored to use jQuery for DOM manipulation.
  */
 
 var DashboardManager = {
@@ -13,13 +14,13 @@ var DashboardManager = {
     // ==========================================
 
     /**
-     * Fetches data and renders summary cards.
+     * Fetches data and renders summary cards using jQuery.
      * @param {string} containerId 
      */
     loadDashboardSummary: function(containerId) {
         var self = this;
-        var container = document.getElementById(containerId);
-        if (!container) return;
+        var $container = $('#' + containerId);
+        if ($container.length === 0) return;
 
         DBHelper.getHabits(function(habits) {
             DBHelper.getMoodLogs(function(moods) {
@@ -30,9 +31,7 @@ var DashboardManager = {
                 var longestStreak = habits.reduce((max, h) => Math.max(max, h.streak || 0), 0);
                 
                 // Average mood last 7 days
-                var sevenDaysAgo = new Date();
-                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-                var recentMoods = moods.filter(m => new Date(m.date) >= sevenDaysAgo);
+                var recentMoods = moods.filter(m => Utils.daysBetween(m.date, today) <= 7);
                 var avgMood = recentMoods.length > 0 
                     ? (recentMoods.reduce((sum, m) => sum + m.mood_level, 0) / recentMoods.length).toFixed(1)
                     : "N/A";
@@ -41,12 +40,9 @@ var DashboardManager = {
                 var moodStreak = 0;
                 var sortedMoods = moods.sort((a,b) => new Date(b.date) - new Date(a.date));
                 if (sortedMoods.length > 0) {
-                    var checkDate = new Date();
-                    checkDate.setHours(0,0,0,0);
+                    var checkDate = today;
                     for (var i = 0; i < sortedMoods.length; i++) {
-                        var logDate = new Date(sortedMoods[i].date);
-                        logDate.setHours(0,0,0,0);
-                        var diff = Math.floor((checkDate - logDate) / (1000 * 60 * 60 * 24));
+                        var diff = Utils.daysBetween(sortedMoods[i].date, checkDate);
                         if (diff === moodStreak) {
                             moodStreak++;
                         } else if (diff > moodStreak) {
@@ -55,7 +51,7 @@ var DashboardManager = {
                     }
                 }
 
-                container.innerHTML = `
+                var html = `
                     <div class="dashboard-summary-grid">
                         ${self.renderStatCard('Total Habits', totalHabits, '📋')}
                         ${self.renderStatCard('Completed Today', completedToday, '✅')}
@@ -64,6 +60,8 @@ var DashboardManager = {
                         ${self.renderStatCard('Mood Streak', moodStreak + ' days', '✨')}
                     </div>
                 `;
+                
+                $container.html(html);
             });
         });
     },
@@ -83,16 +81,15 @@ var DashboardManager = {
                 return self.renderEmptyState(containerId, "No habits to analyze yet.");
             }
 
-            var ctx = document.getElementById(containerId).getContext('2d');
             var labels = habits.map(h => h.name);
-            var data = habits.map(h => h.streak); // Simplified: using current streak as a proxy for "top performance"
+            var data = habits.map(h => h.streak); 
 
             self.createChart(containerId, 'bar', {
                 labels: labels,
                 datasets: [{
                     label: 'Current Streak',
                     data: data,
-                    backgroundColor: '#4caf50',
+                    backgroundColor: '#6C9BD2', // Using --color-primary
                     borderRadius: 5
                 }]
             }, {
@@ -100,15 +97,6 @@ var DashboardManager = {
                 scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
             });
         });
-    },
-
-    /**
-     * Render streak lengths for each habit.
-     * @param {string} containerId 
-     */
-    renderHabitStreakChart: function(containerId) {
-        // Implementation similar to completion but focused on streaks
-        this.renderHabitCompletionChart(containerId); 
     },
 
     // ==========================================
@@ -127,7 +115,7 @@ var DashboardManager = {
             }
 
             var sortedLogs = moods.sort((a,b) => new Date(a.date) - new Date(b.date)).slice(-7);
-            var labels = sortedLogs.map(l => Utils.formatDate(l.date).split(',')[0]);
+            var labels = sortedLogs.map(l => Utils.formatDate(l.date));
             var data = sortedLogs.map(l => l.mood_level);
 
             self.createChart(containerId, 'line', {
@@ -135,8 +123,8 @@ var DashboardManager = {
                 datasets: [{
                     label: 'Mood Level',
                     data: data,
-                    borderColor: '#2196f3',
-                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    borderColor: '#6C9BD2',
+                    backgroundColor: 'rgba(108, 155, 210, 0.1)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: 5
@@ -165,7 +153,7 @@ var DashboardManager = {
                 labels: ['Very Sad', 'Sad', 'Neutral', 'Happy', 'Very Happy'],
                 datasets: [{
                     data: Object.values(counts),
-                    backgroundColor: ['#f44336', '#ff9800', '#ffeb3b', '#8bc34a', '#4caf50']
+                    backgroundColor: ['#E57373', '#FFD54F', '#E0E0E0', '#A5D6A7', '#6C9BD2']
                 }]
             });
         });
@@ -176,20 +164,20 @@ var DashboardManager = {
     // ==========================================
 
     /**
-     * Show weekly habit completion progress.
+     * Show weekly habit completion progress using jQuery.
      * @param {string} containerId 
      */
     renderWeeklyProgress: function(containerId) {
-        var container = document.getElementById(containerId);
-        if (!container) return;
+        var $container = $('#' + containerId);
+        if ($container.length === 0) return;
 
         DBHelper.getHabits(function(habits) {
             var total = habits.length * 7;
-            var completedCount = habits.reduce((sum, h) => sum + Math.min(h.streak, 7), 0); // Mock approximation
+            var completedCount = habits.reduce((sum, h) => sum + Math.min(h.streak, 7), 0); 
             var percent = total > 0 ? Math.round((completedCount/total) * 100) : 0;
 
-            container.innerHTML = `
-                <div class="progress-container">
+            var html = `
+                <div class="progress-container fade-in">
                     <h4>Weekly Goal Progress</h4>
                     <div class="progress-bar-bg">
                         <div class="progress-bar-fill" style="width: ${percent}%"></div>
@@ -197,6 +185,7 @@ var DashboardManager = {
                     <span>${percent}% of your weekly habit goals met</span>
                 </div>
             `;
+            $container.html(html);
         });
     },
 
@@ -218,7 +207,6 @@ var DashboardManager = {
                     insights.push(`You have maintained a ${topStreak}-day habit streak! Keep it up.`);
                 }
 
-                // Simple correlation check (mock)
                 var happyMoods = moods.filter(m => m.mood_level >= 4).length;
                 if (happyMoods > (moods.length / 2) && habits.length > 2) {
                     insights.push("Your mood improves on days when you complete more habits.");
@@ -243,10 +231,10 @@ var DashboardManager = {
             this.charts[id].destroy();
         }
         
-        var canvas = document.getElementById(id);
-        if (!canvas) return;
+        var $canvas = $('#' + id);
+        if ($canvas.length === 0) return;
 
-        this.charts[id] = new Chart(canvas, {
+        this.charts[id] = new Chart($canvas[0], {
             type: type,
             data: data,
             options: Object.assign({
@@ -265,7 +253,7 @@ var DashboardManager = {
      */
     renderStatCard: function(title, value, icon) {
         return `
-            <div class="stat-card">
+            <div class="stat-card slide-up">
                 <div class="stat-icon">${icon}</div>
                 <div class="stat-content">
                     <span class="stat-title">${title}</span>
@@ -276,12 +264,12 @@ var DashboardManager = {
     },
 
     /**
-     * Display empty state message.
+     * Display empty state message using jQuery.
      */
     renderEmptyState: function(containerId, message) {
-        var container = document.getElementById(containerId);
-        if (container) {
-            container.innerHTML = `<div class="empty-state"><p>${message}</p></div>`;
+        var $container = $('#' + containerId);
+        if ($container.length > 0) {
+            $container.html(`<div class="empty-state fade-in"><p>${message}</p></div>`);
         }
     }
 };

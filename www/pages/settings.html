@@ -1,0 +1,127 @@
+<div class="settings-page fade-in">
+    <!-- Page Header -->
+    <section class="settings-header mb-4 mt-2 px-1">
+        <h2 class="h3 fw-bold text-dark mb-1">Settings</h2>
+        <p class="text-secondary small">Personalize your MindHabit experience.</p>
+    </section>
+
+    <!-- Profile Section -->
+    <section class="profile-section mb-4">
+        <div class="card border-0 rounded-4 shadow-sm p-3 d-flex flex-row align-items-center">
+            <div class="profile-avatar bg-light-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                <i class="fas fa-user-circle fa-2x text-primary opacity-50"></i>
+            </div>
+            <div class="profile-info flex-grow">
+                <h4 class="h6 fw-bold mb-0 text-dark">MindHabit User</h4>
+                <p class="text-secondary small mb-0">Habit Enthusiast</p>
+            </div>
+            <button class="btn btn-link text-primary p-2 text-decoration-none fw-bold small" data-action="edit-profile">
+                Edit
+            </button>
+        </div>
+    </section>
+
+    <!-- Settings Groups -->
+    <section class="settings-group mb-4">
+        <h3 class="h6 fw-bold text-uppercase text-muted mb-3 px-1 tracking-wider">Preferences</h3>
+        
+        <div class="card border-0 rounded-4 shadow-sm p-0 overflow-hidden">
+            <ul class="list-group list-group-flush border-0">
+                <!-- Notifications -->
+                <li class="list-group-item d-flex align-items-center justify-content-between py-3 border-0">
+                    <div class="d-flex align-items-center">
+                        <div class="p-2 bg-light-primary rounded-3 text-primary me-3" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-bell small"></i>
+                        </div>
+                        <span class="fw-medium text-dark">Daily Reminders</span>
+                    </div>
+                    <div class="form-check form-switch p-0 m-0">
+                        <input class="form-check-input ms-0" type="checkbox" id="reminder-switch" checked>
+                    </div>
+                </li>
+                
+                <!-- Dark Mode -->
+                <li class="list-group-item d-flex align-items-center justify-content-between py-3">
+                    <div class="d-flex align-items-center">
+                        <div class="p-2 bg-light rounded-3 text-secondary me-3" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-moon small"></i>
+                        </div>
+                        <span class="fw-medium text-dark">Dark Mode</span>
+                    </div>
+                    <div class="form-check form-switch p-0 m-0">
+                        <input class="form-check-input ms-0" type="checkbox" id="dark-mode-switch">
+                    </div>
+                </li>
+
+                <!-- App Language -->
+                <li class="list-group-item d-flex align-items-center justify-content-between py-3">
+                    <div class="d-flex align-items-center">
+                        <div class="p-2 bg-light rounded-3 text-secondary me-3" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-globe small"></i>
+                        </div>
+                        <span class="fw-medium text-dark">Language</span>
+                    </div>
+                    <span class="text-secondary small fw-bold">English <i class="fas fa-chevron-right ms-2 scale-75 opacity-50"></i></span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Support Section -->
+    <section class="settings-group mb-5">
+        <h3 class="h6 fw-bold text-uppercase text-muted mb-3 px-1 tracking-wider">Support</h3>
+        
+        <div class="card border-0 rounded-4 shadow-sm p-0 overflow-hidden">
+            <ul class="list-group list-group-flush border-0">
+                <li class="list-group-item py-3 border-0 d-flex justify-content-between align-items-center clickable" data-action="show-help">
+                    <div class="d-flex align-items-center">
+                        <div class="p-2 bg-light rounded-3 text-secondary me-3" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-question-circle small"></i>
+                        </div>
+                        <span class="fw-medium text-dark">Help Center</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-muted scale-75 opacity-50"></i>
+                </li>
+                <li class="list-group-item py-3 d-flex justify-content-between align-items-center clickable" data-action="export-data">
+                    <div class="d-flex align-items-center">
+                        <div class="p-2 bg-light-danger rounded-3 text-danger me-3" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background-color: rgba(229, 115, 115, 0.1);">
+                            <i class="fas fa-file-export small"></i>
+                        </div>
+                        <span class="fw-medium text-dark">Export My Data</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-muted scale-75 opacity-50"></i>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer Stats (Professional Touch) -->
+    <div class="text-center mb-4 mt-2 opacity-50">
+        <p class="small mb-1 fw-bold text-uppercase" style="letter-spacing: 0.1em; color: var(--color-primary);">MindHabit v1.0.0</p>
+        <p class="small text-muted">Made with passion for wellness</p>
+    </div>
+
+    <!-- Logout Section -->
+    <section class="logout-section mb-5 px-1">
+        <div class="d-grid shadow-sm rounded-pill overflow-hidden">
+            <button class="btn btn-outline-danger border-0 py-3 fw-bold d-flex align-items-center justify-content-center bg-white" data-action="logout">
+                <i class="fas fa-sign-out-alt me-2"></i> Logout
+            </button>
+        </div>
+    </section>
+</div>
+
+<style>
+    .tracking-wider { letter-spacing: 0.1em; }
+    .scale-75 { transform: scale(0.75); }
+    .clickable:active {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+    .form-check-input:checked {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+    .settings-page .card {
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    }
+</style>

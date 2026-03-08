@@ -2,6 +2,7 @@
  * mood.js
  * Handles mood tracking, emotional notes, and mood analytics for MindHabit.
  * Interacts with DBHelper from db.js for SQLite persistence.
+ * Uses jQuery for DOM manipulation.
  */
 
 var MoodManager = {
@@ -29,12 +30,12 @@ var MoodManager = {
      */
     logMood: function(moodLevel, moodLabel, notes, callback) {
         var self = this;
-        var today = new Date().toISOString().split('T')[0];
+        var today = Utils.getCurrentDate();
 
         // Check for existing entry for today
         DBHelper.getMoodByDate(today, function(existing) {
             if (existing) {
-                console.warn('Mood already logged for today. Update instead?');
+                console.warn('Mood already logged for today.');
                 if (callback) callback({ status: 'duplicate', id: existing.id });
                 return;
             }
@@ -62,10 +63,7 @@ var MoodManager = {
      * @param {function} callback 
      */
     updateMoodEntry: function(id, moodLevel, moodLabel, notes, callback) {
-        // We'll update DBHelper's implementation or use a direct update here
-        // Assuming DBHelper.updateMoodLog exists or needs implementation
-        // For this module, we'll implement update logic for settings/habits style
-        var now = new Date().toISOString();
+        var now = Utils.getCurrentTimestamp();
         var updateObj = {
             mood_level: moodLevel,
             mood_label: moodLabel,
@@ -73,8 +71,7 @@ var MoodManager = {
             updated_at: now
         };
 
-        // If DBHelper doesn't have updateMoodLog, we call direct SQL or extend DBHelper
-        // Let's assume we use a pattern similar to updateHabit
+        // Note: Using direct db reference if DBHelper doesn't have specific mood update
         db.transaction(function(tx) {
             var query = 'UPDATE mood_logs SET mood_level = ?, mood_label = ?, notes = ?, updated_at = ? WHERE id = ?';
             tx.executeSql(query, [moodLevel, moodLabel, notes, now, id], function(tx, res) {
@@ -235,55 +232,79 @@ var MoodManager = {
      * Display mood options using icons.
      * @param {string} containerId 
      */
-    renderMoodSelector: function(containerId) {
-        var container = document.getElementById(containerId);
-        if (!container) return;
+    renderMoodSelector: function(gridContainerId) {
+        var $gridContainer = $('#' + gridContainerId);
+        if ($gridContainer.length === 0) return;
 
-        container.innerHTML = '<div class="mood-selector-grid"></div>';
-        var grid = container.querySelector('.mood-selector-grid');
+        $gridContainer.html('<div class="mood-selector-grid"></div>');
+        var $grid = $gridContainer.find('.mood-selector-grid');
+        var $parentSection = $gridContainer.closest('#mood-selector-container');
 
         for (var level in this.moodIcons) {
-            var icon = this.moodIcons[level];
-            var label = icon.split(' ')[1].toLowerCase().replace(' ', '_');
+            var iconData = this.moodIcons[level];
+            var emoji = iconData.split(' ')[0];
+            var labelText = iconData.split(' ')[1] + (iconData.split(' ').length > 2 ? ' ' + iconData.split(' ')[2] : '');
+            var labelVal = labelText.toLowerCase().replace(' ', '_');
             
-            var moodBtn = document.createElement('button');
-            moodBtn.className = 'mood-btn';
-            moodBtn.innerHTML = `<span>${icon.split(' ')[0]}</span><small>${icon.split(' ')[1]}</small>`;
-            moodBtn.onclick = (function(l, lbl) {
-                return function() { MoodManager.logMood(parseInt(l), lbl, ''); };
-            })(level, label);
+            var $moodBtn = $('<button/>', {
+                class: 'mood-btn',
+                'data-level': level,
+                'data-label': labelVal,
+                html: `<span>${emoji}</span><small>${labelText}</small>`
+            });
             
-            grid.appendChild(moodBtn);
+            $grid.append($moodBtn);
         }
     },
 
     /**
-     * Display mood history list.
+     * Display mood history list using jQuery.
      * @param {string} containerId 
      */
     renderMoodHistory: function(containerId) {
-        var container = document.getElementById(containerId);
-        if (!container) return;
+        var $container = $('#' + containerId);
+        if ($container.length === 0) return;
 
         this.getAllMoodLogs(function(logs) {
-            container.innerHTML = '<ul class="mood-history-list"></ul>';
-            var list = container.querySelector('.mood-history-list');
+            $container.html('<ul class="mood-history-list"></ul>');
+            var $list = $container.find('.mood-history-list');
 
-            logs.forEach(log => {
-                var item = document.createElement('li');
-                item.className = 'mood-history-item';
-                var icon = MoodManager.moodIcons[log.mood_level] ? MoodManager.moodIcons[log.mood_level].split(' ')[0] : '❓';
+            if (logs.length === 0) {
+                $list.html('<p class="no-data">No mood logs yet.</p>');
+                return;
+            }
+
+            logs.forEach(function(log) {
+                var moodInfo = self.getMoodInfo(log.mood_level);
                 
-                item.innerHTML = `
-                    <div class="mood-entry-icon">${icon}</div>
-                    <div class="mood-entry-details">
-                        <span class="mood-entry-date">${log.date}</span>
-                        <p class="mood-entry-notes">${log.notes || 'No notes added'}</p>
-                    </div>
-                `;
-                list.appendChild(item);
+                // Use the professional template from App.templates
+                var template = App.templates['mood-entry'] || '';
+                var html = template
+                    .replace(/{{id}}/g, log.id)
+                    .replace(/{{emoji}}/g, moodInfo.emoji)
+                    .replace(/{{label}}/g, moodInfo.label)
+                    .replace(/{{colorClass}}/g, moodInfo.colorClass)
+                    .replace(/{{note}}/g, log.notes || 'No thoughts recorded.') // Changed from log.note to log.notes based on existing code
+                    .replace(/{{time}}/g, Utils.formatTime(log.timestamp)) // Need to ensure utils has formatTime
+                    .replace(/{{date}}/g, Utils.formatDate(log.date));
+                
+                $list.append(html); // Append to $list, not $container
             });
         });
+    },
+
+    /**
+     * Map mood level to object with label, emoji, and color.
+     */
+    getMoodInfo: function(level) {
+        var moods = {
+            1: { label: 'Very Sad', emoji: '😢', colorClass: 'danger' },
+            2: { label: 'Sad', emoji: '😔', colorClass: 'warning' },
+            3: { label: 'Neutral', emoji: '😐', colorClass: 'secondary' },
+            4: { label: 'Happy', emoji: '😊', colorClass: 'success' },
+            5: { label: 'Very Happy', emoji: '🤩', colorClass: 'primary' }
+        };
+        return moods[level] || moods[3];
     },
 
     /**
@@ -291,11 +312,10 @@ var MoodManager = {
      * @param {string} containerId 
      */
     renderMoodCalendar: function(containerId) {
-        var container = document.getElementById(containerId);
-        if (!container) return;
+        var $container = $('#' + containerId);
+        if ($container.length === 0) return;
         
-        // Basic placeholder for calendar logic
-        container.innerHTML = '<div class="mood-calendar-view"><p>Visual Calendar Placeholder</p></div>';
+        $container.html('<div class="mood-calendar-view"><p>Visual Calendar Placeholder</p></div>');
     }
 };
 

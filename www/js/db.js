@@ -5,12 +5,23 @@ var DBHelper = {
      * Initialize the database and create tables if they do not exist.
      */
     initDB: function() {
+        var self = this;
+        
         if (window.sqlitePlugin) {
+            console.log('Using Cordova SQLite Plugin');
             db = window.sqlitePlugin.openDatabase({
                 name: 'mindhabit.db',
                 location: 'default'
             });
+        } else if (window.openDatabase) {
+            console.log('Using WebSQL Fallback (Electron/Browser)');
+            db = window.openDatabase('mindhabit.db', '1.0', 'MindHabit DB', 5 * 1024 * 1024);
+        } else {
+            console.error('No supported database found (SQLite or WebSQL).');
+            return;
+        }
 
+        if (db) {
             db.transaction(function(tx) {
                 // Create habits table
                 tx.executeSql(
@@ -46,12 +57,10 @@ var DBHelper = {
                     'updated_at TEXT)'
                 );
             }, function(error) {
-                console.error('Error initializing database: ' + error.message);
+                console.error('Error initializing database: ' + (error.message || error));
             }, function() {
                 console.log('Database initialized successfully.');
             });
-        } else {
-            console.error('Cordova SQLite Plugin is not available.');
         }
     },
 
@@ -62,6 +71,7 @@ var DBHelper = {
      * @param {Function} errorCallback
      */
     addHabit: function(habitObj, successCallback, errorCallback) {
+        if (!db) return console.error('Database not initialized');
         var now = new Date().toISOString();
         db.transaction(function(tx) {
             var query = 'INSERT INTO habits (name, category, frequency, streak, last_completed_date, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)';

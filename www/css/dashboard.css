@@ -1,0 +1,302 @@
+/* 
+ * dashboard.css
+ * Specific styles for the MindHabit dashboard.
+ * Extends global design tokens from index.css.
+ */
+
+/* ==========================================
+   Section 2: Dashboard Layout
+   ========================================== */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    padding-bottom: var(--spacing-xl);
+}
+
+.dashboard-header {
+    margin-bottom: var(--spacing-md);
+    text-align: left;
+}
+
+.dashboard-header p {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    margin-top: calc(-1 * var(--spacing-xs));
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.dashboard-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.dashboard-section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+}
+
+/* ==========================================
+   Section 3: Statistic Cards
+   ========================================== */
+.stat-card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.05em;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: var(--spacing-xs) 0;
+}
+
+.stat-description {
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+}
+
+/* ==========================================
+   Section 4: Habit Analytics
+   ========================================== */
+.habit-analytics {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.habit-chart-card {
+    padding: var(--spacing-lg);
+    min-height: 250px;
+}
+
+.habit-progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: var(--spacing-xs) 0;
+}
+
+.habit-progress-fill {
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.habit-list-summary {
+    list-style: none;
+}
+
+.habit-summary-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.habit-summary-item:last-child {
+    border-bottom: none;
+}
+
+/* ==========================================
+   Section 5: Mood Analytics
+   ========================================== */
+.mood-chart-card {
+    padding: var(--spacing-lg);
+    min-height: 250px;
+}
+
+.mood-trend {
+    margin-top: var(--spacing-md);
+}
+
+.mood-distribution {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.mood-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.mood-very-sad { background-color: #E57373; }
+.mood-sad { background-color: #FFB74D; }
+.mood-neutral { background-color: #FFF176; color: rgba(0,0,0,0.5); }
+.mood-happy { background-color: #AED581; }
+.mood-very-happy { background-color: #81C784; }
+
+/* ==========================================
+   Section 6: Weekly Progress Section
+   ========================================== */
+.weekly-progress-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.progress-circle {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: conic-gradient(var(--color-primary) var(--progress, 0%), var(--color-border) 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-circle::after {
+    content: '';
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    background-color: var(--color-surface);
+    border-radius: 50%;
+}
+
+.progress-text {
+    position: relative;
+    z-index: 10;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-primary);
+}
+
+/* ==========================================
+   Section 7: Wellness Insights
+   ========================================== */
+.insight-card {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #8FB8ED 100%);
+    color: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    box-shadow: var(--shadow-md);
+}
+
+.insight-icon {
+    font-size: 2.5rem;
+    opacity: 0.9;
+}
+
+.insight-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* ==========================================
+   Section 8: Chart Containers
+   ========================================== */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    margin: var(--spacing-sm) 0;
+}
+
+.chart-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* ==========================================
+   Section 9: Empty State
+   ========================================== */
+.empty-dashboard {
+    padding: var(--spacing-xl) 0;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.3;
+}
+
+.empty-text {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+/* ==========================================
+   Section 10: Animations
+   ========================================== */
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Animations defined in index.css are reused here:
+   .fade-in, .slide-up, .scale-in */
+
+/* ==========================================
+   Section 11: Responsive Design
+   ========================================== */
+@media (min-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .dashboard-container {
+        gap: var(--spacing-xl);
+    }
+}

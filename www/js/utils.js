@@ -40,6 +40,19 @@ var Utils = {
     },
 
     /**
+     * Convert a raw date into a human-readable time.
+     * Example: "2026-03-08T14:30:00Z" -> "2:30 PM"
+     * @param {string|Date} date 
+     * @returns {string}
+     */
+    formatTime: function(date) {
+        if (!date) return "";
+        var d = new Date(date);
+        var options = { hour: 'numeric', minute: '2-digit', hour12: true };
+        return d.toLocaleTimeString('en-US', options);
+    },
+
+    /**
      * Return the previous day's date as YYYY-MM-DD.
      * @returns {string}
      */

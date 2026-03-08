@@ -32,7 +32,10 @@
     ],
     "plugins": {
       "cordova-sqlite-storage": {},
-      "cordova-plugin-local-notification": {}
+      "cordova-plugin-local-notification": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-camera": {},
+      "cordova-plugin-whitelist": {}
     }
   }
 }

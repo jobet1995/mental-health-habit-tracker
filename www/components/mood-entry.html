@@ -1,0 +1,40 @@
+<div class="mood-entry card shadow-sm mb-3 border-0 rounded-4 overflow-hidden slide-up" data-id="{{id}}">
+    <div class="card-body p-3">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="mood-info d-flex align-items-center">
+                <div class="mood-visual me-3 p-2 rounded-4 bg-light shadow-sm d-flex align-items-center justify-content-center" 
+                     style="width: 50px; height: 50px; font-size: 1.5rem;">
+                    {{moodEmoji}}
+                </div>
+                <div>
+                    <h3 class="h6 fw-bold mb-0 text-dark">{{moodLabel}}</h3>
+                    <small class="text-secondary fw-medium">{{date}}</small>
+                </div>
+            </div>
+            <div class="mood-actions">
+                <div class="dropdown">
+                    <button class="btn btn-link text-muted p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
+                        <li><a class="dropdown-item py-2" href="#" data-action="edit-mood" data-id="{{id}}"><i class="fas fa-edit me-2 small"></i>Edit</a></li>
+                        <li><a class="dropdown-item py-2 text-danger" href="#" data-action="delete-mood" data-id="{{id}}"><i class="fas fa-trash-alt me-2 small"></i>Delete</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mood-content p-3 bg-light rounded-3">
+            <p class="mb-0 text-secondary italic" style="font-size: 0.9rem; line-height: 1.5;">
+                <i class="fas fa-quote-left text-primary opacity-25 me-2"></i>
+                {{notes}}
+            </p>
+        </div>
+        
+        <div class="mood-footer mt-2 d-flex justify-content-end">
+            <div class="mood-tag badge border text-muted fw-normal rounded-pill px-2 py-1" style="font-size: 0.7rem;">
+                <i class="far fa-clock me-1"></i> {{time}}
+            </div>
+        </div>
+    </div>
+</div>

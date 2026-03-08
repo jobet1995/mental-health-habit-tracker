@@ -1,0 +1,110 @@
+<div class="mood-page fade-in">
+    <!-- Page Header -->
+    <section class="mood-header mb-4 mt-2 px-1">
+        <h2 class="h3 fw-bold text-dark mb-1">Emotion Check-in</h2>
+        <p class="text-secondary small">Understanding your feelings is the first step to balance.</p>
+    </section>
+
+    <!-- Mood Selector -->
+    <section id="mood-selector-container" class="mb-4" data-mood-selector>
+        <div class="card border-0 rounded-4 shadow-sm p-4 overflow-hidden position-relative">
+            <h3 class="h6 fw-bold text-uppercase text-muted mb-4 tracking-wider">How do you feel?</h3>
+            <div id="mood-grid-container">
+                <!-- Rendered by MoodManager.renderMoodSelector -->
+                <div class="d-flex justify-content-center py-4">
+                    <div class="spinner-border text-primary opacity-25" role="status">
+                        <span class="visually-hidden">Loading Selector...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emotional Note Section -->
+    <section class="mood-note-section mb-4 px-1">
+        <div class="form-group mb-0">
+            <label for="mood-notes" class="h6 fw-bold text-muted mb-3 d-block text-uppercase tracking-wider">Add a Note (Optional)</label>
+            <textarea id="mood-notes" class="form-control border-0 shadow-sm rounded-4 p-3" rows="3" placeholder="What's contributing to your mood today?" style="background: rgba(255, 255, 255, 0.8);"></textarea>
+        </div>
+        <div class="d-grid mt-3">
+            <button id="save-mood-btn" class="btn btn-secondary rounded-pill py-3 fw-bold shadow-sm">
+                <i class="fas fa-save me-2"></i> Save Entry
+            </button>
+        </div>
+    </section>
+
+    <!-- Entry History -->
+    <section class="mood-history-section mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+            <h3 class="h6 fw-bold text-uppercase text-muted mb-0 tracking-wider">Emotional History</h3>
+            <button class="btn btn-link btn-sm text-primary text-decoration-none fw-bold small p-0" data-action="load-page" data-page="mood-analytics">
+                View Trends <i class="fas fa-chevron-right ms-1 small"></i>
+            </button>
+        </div>
+        
+        <div id="mood-history-container" class="mood-history-list">
+            <!-- Rendered by MoodManager.renderMoodHistory -->
+            <div class="d-flex flex-column align-items-center justify-content-center py-5 opacity-50">
+                <i class="fas fa-history fa-3x mb-3 text-light-primary"></i>
+                <p class="text-secondary">Loading your history...</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .tracking-wider { letter-spacing: 0.1em; }
+    
+    #mood-selector-container .mood-selector-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .mood-btn {
+        background: transparent;
+        border: none;
+        padding: 0.5rem;
+        border-radius: 1rem;
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    
+    .mood-btn:active {
+        transform: scale(0.9);
+        background-color: rgba(108, 155, 210, 0.1);
+    }
+    
+    .mood-btn span {
+        font-size: 2rem;
+        margin-bottom: 0.25rem;
+        display: block;
+    }
+    
+    .mood-btn small {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--color-text-secondary);
+        white-space: nowrap;
+    }
+    
+    #mood-notes:focus {
+        box-shadow: 0 5px 15px rgba(108, 155, 210, 0.1) !important;
+        background: #fff !important;
+    }
+
+    /* Pulse animation for selected mood entry (optional logic handle) */
+    .pulse {
+        animation: moodPulse 1.5s ease-out;
+    }
+    
+    @keyframes moodPulse {
+        0% { background-color: rgba(108, 155, 210, 0.1); transform: scale(1); }
+        50% { background-color: rgba(108, 155, 210, 0.3); transform: scale(1.1); }
+        100% { background-color: transparent; transform: scale(1); }
+    }
+</style>
