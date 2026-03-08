@@ -1,0 +1,38 @@
+{
+  "name": "org.apache.cordova.hellocordova",
+  "displayName": "Hello Cordova",
+  "version": "1.0.0",
+  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@capacitor/app": "8.0.1",
+    "@capacitor/cli": "8.2.0",
+    "@capacitor/core": "8.2.0",
+    "@capacitor/haptics": "8.0.1",
+    "@capacitor/keyboard": "8.0.1",
+    "@capacitor/status-bar": "8.0.1"
+  },
+  "devDependencies": {
+    "cordova-electron": "^4.0.0",
+    "cordova-plugin-device": "^3.0.0",
+    "cordova-plugin-local-notification": "^1.2.3",
+    "cordova-sqlite-storage": "^7.0.0"
+  },
+  "cordova": {
+    "platforms": [
+      "electron"
+    ],
+    "plugins": {
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-local-notification": {}
+    }
+  }
+}

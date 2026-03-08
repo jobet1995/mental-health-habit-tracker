@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.example.mindhabit" version="1.0.0" xmlns="http://www.w3.org/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>MindHabit</name>
+    <description>
+        A mental health and habit tracker app to log mood, track habits, and provide self-care
+        reminders.
+    </description>
+    <author email="jobetcasquejo221@gmail.com" href="https://example.com">
+        Jobet Casquejo
+    </author>
+
+    <!-- Application Entry Point -->
+    <content src="index.html" />
+
+    <!-- Access, Navigation, and Intents -->
+    <access origin="*" />
+    <allow-navigation href="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+
+    <!-- Global Preferences -->
+    <preference name="Fullscreen" value="true" />
+    <preference name="Orientation" value="portrait" />
+    <!-- Webview bounce: disabled -->
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="UIWebViewBounce" value="false" />
+    <preference name="BackgroundColor" value="0xffffffff" />
+
+    <!-- App UI & Performance Recommendations -->
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
+    <preference name="HideKeyboardFormAccessoryBar" value="true" />
+
+    <!-- Platform: Android -->
+    <platform name="android">
+        <!-- Android Preferences -->
+        <preference name="android-minSdkVersion" value="21" />
+        <preference name="android-targetSdkVersion" value="33" />
+        <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+        <preference name="android-build-tool" value="gradle" />
+        <preference name="AndroidXEnabled" value="true" />
+
+        <!-- Android Intents -->
+        <allow-intent href="market:*" />
+
+        <!-- Android Permissions -->
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.CAMERA" />
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <!-- Notification permission (Required for Android 13/API 33+) -->
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+        </config-file>
+
+        <!-- Android Icons -->
+        <icon src="res/icon/android/icon-36-ldpi.png" density="ldpi" />
+        <icon src="res/icon/android/icon-48-mdpi.png" density="mdpi" />
+        <icon src="res/icon/android/icon-72-hdpi.png" density="hdpi" />
+        <icon src="res/icon/android/icon-96-xhdpi.png" density="xhdpi" />
+        <icon src="res/icon/android/icon-144-xxhdpi.png" density="xxhdpi" />
+        <icon src="res/icon/android/icon-192-xxxhdpi.png" density="xxxhdpi" />
+
+        <!-- Android Splash Screens -->
+        <splash src="res/screen/android/splash-port-ldpi.png" density="port-ldpi" />
+        <splash src="res/screen/android/splash-port-mdpi.png" density="port-mdpi" />
+        <splash src="res/screen/android/splash-port-hdpi.png" density="port-hdpi" />
+        <splash src="res/screen/android/splash-port-xhdpi.png" density="port-xhdpi" />
+        <splash src="res/screen/android/splash-port-xxhdpi.png" density="port-xxhdpi" />
+        <splash src="res/screen/android/splash-port-xxxhdpi.png" density="port-xxxhdpi" />
+    </platform>
+
+    <!-- Platform: iOS -->
+    <platform name="ios">
+        <!-- iOS Preferences -->
+        <preference name="deployment-target" value="13.0" />
+        <preference name="WKWebViewOnly" value="true" />
+        <preference name="target-device" value="handset" />
+
+        <!-- iOS Intents -->
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+
+        <!-- iOS Permissions (Info.plist entries) -->
+        <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+            <string>We need camera access to capture photos for your daily mood logs and habit
+                tracking check-ins.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+            <string>We need storage access to save and load your habit tracking data and images.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSPhotoLibraryAddUsageDescription">
+            <string>We need photo library access to save images generated inside the MindHabit app.</string>
+        </config-file>
+
+        <!-- iOS Icons -->
+        <icon src="res/icon/ios/icon-20.png" width="20" height="20" />
+        <icon src="res/icon/ios/icon-20@2x.png" width="40" height="40" />
+        <icon src="res/icon/ios/icon-20@3x.png" width="60" height="60" />
+        <icon src="res/icon/ios/icon-29.png" width="29" height="29" />
+        <icon src="res/icon/ios/icon-29@2x.png" width="58" height="58" />
+        <icon src="res/icon/ios/icon-29@3x.png" width="87" height="87" />
+        <icon src="res/icon/ios/icon-40.png" width="40" height="40" />
+        <icon src="res/icon/ios/icon-40@2x.png" width="80" height="80" />
+        <icon src="res/icon/ios/icon-40@3x.png" width="120" height="120" />
+        <icon src="res/icon/ios/icon-50.png" width="50" height="50" />
+        <icon src="res/icon/ios/icon-50@2x.png" width="100" height="100" />
+        <icon src="res/icon/ios/icon-57.png" width="57" height="57" />
+        <icon src="res/icon/ios/icon-57@2x.png" width="114" height="114" />
+        <icon src="res/icon/ios/icon-60.png" width="60" height="60" />
+        <icon src="res/icon/ios/icon-60@2x.png" width="120" height="120" />
+        <icon src="res/icon/ios/icon-60@3x.png" width="180" height="180" />
+        <icon src="res/icon/ios/icon-72.png" width="72" height="72" />
+        <icon src="res/icon/ios/icon-72@2x.png" width="144" height="144" />
+        <icon src="res/icon/ios/icon-76.png" width="76" height="76" />
+        <icon src="res/icon/ios/icon-76@2x.png" width="152" height="152" />
+        <icon src="res/icon/ios/icon-83.5@2x.png" width="167" height="167" />
+        <icon src="res/icon/ios/icon-1024.png" width="1024" height="1024" />
+
+        <!-- iOS Splash Screens -->
+        <splash src="res/screen/ios/Default@2x~iphone.png" width="640" height="960" />
+        <splash src="res/screen/ios/Default-568h@2x~iphone.png" width="640" height="1136" />
+        <splash src="res/screen/ios/Default-667h.png" width="750" height="1334" />
+        <splash src="res/screen/ios/Default-736h.png" width="1242" height="2208" />
+        <splash src="res/screen/ios/Default-2436h.png" width="1125" height="2436" />
+        <splash src="res/screen/ios/Default-Landscape-736h.png" width="2208" height="1242" />
+        <splash src="res/screen/ios/Default-Landscape-2436h.png" width="2436" height="1125" />
+    </platform>
+
+    <!-- Plugins -->
+    <plugin name="cordova-plugin-local-notification" />
+    <plugin name="cordova-sqlite-storage" />
+    <plugin name="cordova-plugin-device" />
+    <plugin name="cordova-plugin-camera" />
+    <plugin name="cordova-plugin-whitelist" />
+</widget>

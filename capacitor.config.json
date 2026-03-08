@@ -1,0 +1,5 @@
+{
+  "appId": "org.apache.cordova.hellocordova",
+  "appName": "org.apache.cordova.hellocordova",
+  "webDir": "dist"
+}

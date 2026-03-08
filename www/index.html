@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- 
+            SECURE CSP: 
+            Removed 'unsafe-eval' to fix Electron security warnings.
+            Allowed cdnjs for Chart.js (or you can bundle it locally).
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <meta name="color-scheme" content="light dark">
+        
+        <link rel="stylesheet" href="css/index.css">
+        <title>MindHabit</title>
+    </head>
+    <body>
+        <!-- Header / Brand -->
+        <header class="app-header">
+            <h1>MindHabit</h1>
+            <div id="offline-banner" style="display:none;">Offline Mode</div>
+        </header>
+
+        <!-- Main App Container (SPA Content) -->
+        <main id="app">
+            <div class="loader">Loading MindHabit...</div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-link" data-page="dashboard">Dashboard</a>
+            <a href="#" class="nav-link" data-page="habit-list">Habits</a>
+            <a href="#" class="nav-link" data-page="mood-tracker">Mood</a>
+            <a href="#" class="nav-link" data-page="settings">Settings</a>
+        </nav>
+
+        <!-- External Libraries -->
+        <!-- Note: Recommended to download these for true offline Cordova support -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <!-- Cordova Library -->
+        <script src="cordova.js"></script>
+
+        <!-- App Modules -->
+        <script src="js/utils.js"></script>
+        <script src="js/db.js"></script>
+        <script src="js/habit.js"></script>
+        <script src="js/mood.js"></script>
+        <script src="js/notifications.js"></script>
+        <script src="js/dashboard.js"></script>
+        
+        <!-- Main Entry Point -->
+        <script src="js/index.js"></script>
+    </body>
+</html>
